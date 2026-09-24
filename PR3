@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+// Function declarations
+void enqueue(int queue[], int *front, int *rear, int val);
+int dequeue(int queue[], int *front, int *rear);
+void display(int queue[], int front, int rear);
+
+int main()
+{
+    int queue[MAX];
+    int front = -1;
+    int rear = -1;
+    int choice, val;
+
+    while (1)
+    {
+        printf("\n===================================\n");
+        printf("       QUEUE OPERATIONS MENU (FIFO)\n");
+        printf("===================================\n");
+        printf("1. ENQUEUE (Insert Element)\n");
+        printf("2. DEQUEUE (Delete Element)\n");
+        printf("3. DISPLAY Queue\n");
+        printf("4. EXIT\n");
+        printf("-----------------------------------\n");
+
+        printf("Enter your choice (1-4): ");
+
+        if (scanf("%d", &choice) != 1)
+        {
+            printf("Invalid input! Please enter an integer.\n");
+
+            while (getchar() != '\n');
+
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                printf("\nEnter value to enqueue: ");
+
+                if (scanf("%d", &val) != 1)
+                {
+                    printf("Invalid input!\n");
+
+                    while (getchar() != '\n');
+
+                    break;
+                }
+
+                enqueue(queue, &front, &rear, val);
+                break;
+
+            case 2:
+                val = dequeue(queue, &front, &rear);
+
+                if (val != -1)
+                {
+                    printf("\nDequeued element: %d\n", val);
+                }
+
+                break;
+
+            case 3:
+                display(queue, front, rear);
+                break;
+
+            case 4:
+                printf("\nExiting program. Thank you!\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice! Please select a valid option (1-4).\n");
+        }
+    }
+
+    return 0;
+}
+
+// 1. Enqueue Operation
+void enqueue(int queue[], int *front, int *rear, int val)
+{
+    if (*rear >= MAX - 1)
+    {
+        printf("\nError: Queue Overflow! Cannot enqueue %d. Queue is full.\n",
+               val);
+        return;
+    }
+
+    if (*front == -1)
+    {
+        *front = 0;
+    }
+
+    (*rear)++;
+    queue[*rear] = val;
+
+    printf("Successfully enqueued %d into the queue.\n", val);
+}
+
+// 2. Dequeue Operation
+int dequeue(int queue[], int *front, int *rear)
+{
+    int dequeued_val;
+
+    if (*front == -1)
+    {
+        printf("\nError: Queue Underflow! Cannot dequeue. Queue is empty.\n");
+        return -1;
+    }
+
+    dequeued_val = queue[*front];
+
+    if (*front == *rear)
+    {
+        *front = -1;
+        *rear = -1;
+    }
+    else
+    {
+        (*front)++;
+    }
+
+    return dequeued_val;
+}
+
+// 3. Display Operation
+void display(int queue[], int front, int rear)
+{
+    int i;
+
+    if (front == -1)
+    {
+        printf("\nQueue is empty! Nothing to display.\n");
+        return;
+    }
+
+    printf("\n--- QUEUE ELEMENTS (Front to Rear) ---\n");
+
+    for (i = front; i <= rear; i++)
+    {
+        printf("Index [%d] : %d %s %s\n",
+               i,
+               queue[i],
+               (i == front) ? "<-- FRONT" : "",
+               (i == rear) ? "<-- REAR" : "");
+    }
+
+    printf("-----------------------------------\n");
+}
