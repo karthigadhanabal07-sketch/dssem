@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+// Function declarations
+void push(int stack[], int *top, int val);
+int pop(int stack[], int *top);
+int peek(int stack[], int top);
+void display(int stack[], int top);
+
+int main()
+{
+    int stack[MAX];
+    int top = -1;
+    int choice, val;
+
+    while (1)
+    {
+        printf("\n==================================\n");
+        printf("       STACK OPERATIONS MENU (LIFO)\n");
+        printf("==================================\n");
+        printf("1. PUSH (Insert Element)\n");
+        printf("2. POP (Delete Element)\n");
+        printf("3. PEEK (View Top Element)\n");
+        printf("4. DISPLAY Stack\n");
+        printf("5. EXIT\n");
+
+        printf("\nEnter your choice (1-5): ");
+
+        if (scanf("%d", &choice) != 1)
+        {
+            printf("Invalid input! Please enter an integer.\n");
+
+            while (getchar() != '\n');
+
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                printf("\nEnter value to push: ");
+
+                if (scanf("%d", &val) != 1)
+                {
+                    printf("Invalid input!\n");
+
+                    while (getchar() != '\n');
+
+                    break;
+                }
+
+                push(stack, &top, val);
+                break;
+
+            case 2:
+                val = pop(stack, &top);
+
+                if (val != -1)
+                {
+                    printf("\nPopped element: %d\n", val);
+                }
+
+                break;
+
+            case 3:
+                val = peek(stack, top);
+
+                if (val != -1)
+                {
+                    printf("\nTop element is: %d\n", val);
+                }
+
+                break;
+
+            case 4:
+                display(stack, top);
+                break;
+
+            case 5:
+                printf("\nExiting program. Thank you!\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice! Please select a valid option (1-5).\n");
+        }
+    }
+
+    return 0;
+}
+
+// 1. Push Operation
+void push(int stack[], int *top, int val)
+{
+    if (*top >= MAX - 1)
+    {
+        printf("\nError: Stack Overflow! Cannot push %d. Stack is full.\n",
+               val);
+        return;
+    }
+
+    (*top)++;
+    stack[*top] = val;
+
+    printf("Successfully pushed %d onto the stack.\n", val);
+}
+
+// 2. Pop Operation
+int pop(int stack[], int *top)
+{
+    if (*top == -1)
+    {
+        printf("\nError: Stack Underflow! Cannot pop. Stack is empty.\n");
+        return -1;
+    }
+
+    int popped_val = stack[*top];
+
+    (*top)--;
+
+    return popped_val;
+}
+
+// 3. Peek Operation
+int peek(int stack[], int top)
+{
+    if (top == -1)
+    {
+        printf("\nStack is empty! No element to peek.\n");
+        return -1;
+    }
+
+    return stack[top];
+}
+
+// 4. Display Operation
+void display(int stack[], int top)
+{
+    int i;
+
+    if (top == -1)
+    {
+        printf("\nStack is empty! Nothing to display.\n");
+        return;
+    }
+
+    printf("\n--- STACK ELEMENTS (Top to Bottom) ---\n");
+
+    for (i = top; i >= 0; i--)
+    {
+        printf("Index [%d] : %d %s\n",
+               i, stack[i],
+               (i == top) ? "<-- TOP" : "");
+    }
+
+    printf("---------------------------------------\n");
+}
